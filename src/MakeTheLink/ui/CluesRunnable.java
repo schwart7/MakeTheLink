@@ -2,6 +2,8 @@ package MakeTheLink.ui;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 import MakeTheLink.core.Question;
 
@@ -9,9 +11,9 @@ public class CluesRunnable implements Runnable {
 
 	private volatile boolean running = true;
 	private Question thisQuestion;
-	private List clues_list;
+	private Table clues_list;
 
-	public CluesRunnable(Question thisQuestion, List clues_list) {
+	public CluesRunnable(Question thisQuestion, Table clues_list) {
 		this.thisQuestion = thisQuestion;
 		this.clues_list = clues_list;
 	}
@@ -38,7 +40,9 @@ public class CluesRunnable implements Runnable {
 
 			display.asyncExec(new Runnable() {
 				public void run() {
-					clues_list.add(hint);
+					TableItem clue_item = new TableItem(clues_list, 300);
+					clue_item.setText(hint);
+					clues_list.showItem(clue_item);
 				}
 			});
 		}

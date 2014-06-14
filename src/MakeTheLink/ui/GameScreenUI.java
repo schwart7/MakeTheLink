@@ -21,13 +21,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 public class GameScreenUI extends AbstractScreenUI {
 	private Map<String, Integer> playersAndKeys;
 	private String[] players;
 	private Label[] players_label;
 	private Label round_label;
-	private List clues_list;
+	private Table clues_list;
 	private int round;
 	private Game game;
 	private Button start_game;
@@ -112,6 +115,8 @@ public class GameScreenUI extends AbstractScreenUI {
 		this.gameInformation.setLayoutData(data);
 
 		this.gameInformation.setLayout(new GridLayout(1, false));
+		
+
 
 		timerWidget = new TimerWidget(this.gameInformation, 0, this);
 
@@ -122,12 +127,15 @@ public class GameScreenUI extends AbstractScreenUI {
 		this.score_group.setLayout(new GridLayout(1, false));
 
 		
-		this.clues_list = new List(this.shell, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.VIRTUAL);
+		this.clues_list = new Table(this.shell, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.VIRTUAL);
+		TableColumn id_column = new TableColumn(clues_list, SWT.CENTER);
 		this.clues_list.setFont(this.font);
 		data = new GridData(GridData.FILL_BOTH);
 		data.horizontalSpan = 3;
 		this.clues_list.setLayoutData(data);
-
+		this.clues_list.setEnabled(true);
+		
+		
 		this.answers_group = new Group(this.shell, 0);
 		data = new GridData(GridData.FILL_BOTH);
 		data.horizontalSpan = 3;
@@ -135,6 +143,9 @@ public class GameScreenUI extends AbstractScreenUI {
 
 		this.answers_group.setLayout(new GridLayout(2, true));
 		this.answers_group.setEnabled(false);
+		
+
+		clues_list.forceFocus();
 
 		Shell wait = new Shell(Display.getCurrent(), SWT.ON_TOP);
 		createWaitingShell(wait);
@@ -282,7 +293,10 @@ public class GameScreenUI extends AbstractScreenUI {
 		this.shell.layout();
 
 		String clue = thisQuestion.getHintsList()[0];
-		this.clues_list.add(clue);
+		
+		TableItem clue_item = new TableItem(clues_list, 300);
+		clue_item.setText(clue);
+		clues_list.showItem(clue_item);
 		
 		clueGenrator = new CluesRunnable(thisQuestion, this.clues_list);
 		MakeTheLinkMain.threadPool.execute(clueGenrator);
@@ -305,7 +319,7 @@ public class GameScreenUI extends AbstractScreenUI {
 	}
 
 	public void updateRound() {
-		this.clues_list.setItems(new String[0]);
+		this.clues_list.removeAll();
 		for (Control widget : this.answers_group.getChildren()) {
 			widget.dispose();
 		}
@@ -434,7 +448,7 @@ public class GameScreenUI extends AbstractScreenUI {
 		
 		
 		Display.getDefault().addFilter(SWT.KeyDown , answerListener);
-
+		
 	}
 	
 
