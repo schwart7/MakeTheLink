@@ -10,20 +10,25 @@ import java.util.concurrent.Future;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
-import MakeTheLink.db.Load_yago;
+import MakeTheLink.db.Load_yago_funcs;
 
-public class chooseUpdateUI extends AbstractScreenUI{
+
+
+public class ChooseUpdateUI extends AbstractScreenUI{
 	
 	private Label label_update_status;
+	private Text pathText;
 	
 	public boolean window_busy = false;
 
-	public chooseUpdateUI(Shell shell) {
+	public ChooseUpdateUI(Shell shell) {
 		super(shell, null, "choose update type");
 		
 	}
@@ -40,14 +45,30 @@ public class chooseUpdateUI extends AbstractScreenUI{
 		Button manualUpdate = new Button(shell, SWT.PUSH);
 		manualUpdate.setText("Manual Update");
 		
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		
+		
+		
+	    Label labelPath = new Label(shell, SWT.NONE);
+	    labelPath.setText("Yago files path (followed by a slash):");
+	    pathText = new Text(shell, SWT.BORDER);
+	    pathText.setText("/home/user7/Desktop/shared/yago2s_tsv/                                               "+
+	    "                                                                                                       ");
+		
 		Button fullUpdate = new Button(shell, SWT.PUSH);
-		fullUpdate.setText("Full Update from YAGO files");
+		fullUpdate.setText("Perform Full Update from YAGO files");
 		
 	    label_update_status = new Label(shell, SWT.NONE);
 	    label_update_status.setText("                                                                       "+
 	    "                                                                                                    "+
 	    "                                                                                                    ");
-	    new Label(shell, SWT.NONE);
+	    
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		
 		Button back = new Button(shell, SWT.PUSH);
 		back.setText("Back");
 		
@@ -57,13 +78,21 @@ public class chooseUpdateUI extends AbstractScreenUI{
 				if(!window_busy){
 					window_busy=true;
 					
+					
+					MakeTheLink.core.Load_yago.set_path(pathText.getText());
+					
 					final Runnable runnable = (new Runnable() {
 						public void run() {						
 							try {
-								MakeTheLink.db.Load_yago.load_yago
-										(chooseUpdateUI.this);
-							} catch (ClassNotFoundException | SQLException | IOException e1) {
-								e1.printStackTrace();
+								MakeTheLink.core.Load_yago.load_yago(ChooseUpdateUI.this);
+							} catch (Exception e1) {
+								
+								shell.getDisplay().asyncExec(new Runnable(){
+									public void run(){
+										label_update_status.setText("Failed to perform update from yago files!");
+										window_busy=false;
+									}
+								});
 							}  
 						}
 					});

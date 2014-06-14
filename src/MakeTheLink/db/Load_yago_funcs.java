@@ -1,4 +1,4 @@
-//the main course of loading yago files to schema is managed here
+//the functions for loading yago files to schema are implemented here
 
 package MakeTheLink.db;
 
@@ -10,74 +10,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TableItem;
 
 import MakeTheLink.ui.Edit_menu_window;
-import MakeTheLink.ui.chooseUpdateUI;
+import MakeTheLink.ui.ChooseUpdateUI;
 
-public class Load_yago {
-	
-	private static String yago_file_path = "";
-	private static String yago_loading_progress = "";
-	private static Connection conn;
-	
-	
-	public static String get_progress(){
-		return yago_loading_progress;
-	}
-	public static void set_path(String str){
-		yago_file_path=str;
-	}
-	//the main course of loading yago files to schema is managed here
-	public static void load_yago(chooseUpdateUI ui)
-			 throws ClassNotFoundException, SQLException, IOException{
-		
-		conn = Connection_pooling.cpds.getConnection();
-		
-		clean_aux();
-		Populate_tmp_schema.clean_aux(conn);
-		
-		Create_schema.destroy(conn, "tmp");
-		Create_schema.create(conn, "tmp");
-		
-		ui.update_load_progress("Loading facts (0% completed)");
-		load_facts(yago_file_path);
-		ui.update_load_progress("Loading literal facts (20% completed)");
-		load_literal_facts(yago_file_path);
-		ui.update_load_progress("Loading types (30% completed)");
-		load_types(yago_file_path);
-		ui.update_load_progress("Loading wikipedia info (50% completed)");
-		load_wiki(yago_file_path);
-		
-		ui.update_load_progress("Populating music (70% completed)");
-		Populate_tmp_schema.populate_music(conn);
+public class Load_yago_funcs {
 
-		ui.update_load_progress("Populating cinema (75% completed)");
-		Populate_tmp_schema.populate_cinema(conn);
+	public static Connection conn;
 		
-		ui.update_load_progress("Populating places (80% completed)");
-		Populate_tmp_schema.populate_places(conn);
-
-		
-		ui.update_load_progress("Populating sports (95% completed)");
-		Populate_tmp_schema.populate_sports(conn);
-		
-		clean_aux();
-		Populate_tmp_schema.clean_aux(conn);
-
-		ui.update_load_progress("Populating main schema (99% completed)");
-		
-		//copy yago data from tmp to curr
-
-		conn.setAutoCommit(false);
-		Copy_tmp_to_curr.copy(conn);
-		conn.commit();
-		conn.setAutoCommit(true);
-
-		Create_schema.destroy(conn, "tmp");
-
-		conn.close();
-		
-		ui.update_load_progress("Yago loaded");
-	}
-	
 	private static PreparedStatement[] pstmt_facts = new PreparedStatement[6];
 	private static int[] cnt_facts = {0,0,0,0,0,0};
 	
@@ -92,7 +30,7 @@ public class Load_yago {
 		}
 	}
 	
-	private static void load_facts(String path) 
+	public static void load_facts(String path) 
 			throws ClassNotFoundException, SQLException, IOException{
 
 		Statement stmt = conn.createStatement();
@@ -135,7 +73,7 @@ public class Load_yago {
 		}
 	}
 	
-	private static void load_literal_facts(String path) throws ClassNotFoundException, SQLException, IOException{
+	public static void load_literal_facts(String path) throws ClassNotFoundException, SQLException, IOException{
 
 		Statement stmt = conn.createStatement();
 				
@@ -176,7 +114,7 @@ public class Load_yago {
 		}
 	}
 	
-	private static void load_types(String path) throws ClassNotFoundException, SQLException, IOException{
+	public static void load_types(String path) throws ClassNotFoundException, SQLException, IOException{
 		Statement stmt_types = conn.createStatement();
 				
 		String fields = " (c1 VARCHAR(300), UNIQUE(c1)) ENGINE = MyISAM; ";
@@ -209,7 +147,7 @@ public class Load_yago {
 		stmt_types.close();
 	}
 	
-	private static void load_wiki(String path) throws ClassNotFoundException, SQLException, IOException{
+	public static void load_wiki(String path) throws ClassNotFoundException, SQLException, IOException{
 
 		Statement stmt = conn.createStatement();
 		
@@ -249,7 +187,7 @@ public class Load_yago {
 		stmt.close();
 	}
 	
-	private static void clean_aux() throws SQLException{
+	public static void clean_aux() throws SQLException{
 		Statement stmt = conn.createStatement();
 		stmt.execute(	"	DROP TABLE IF EXISTS fact_acted_in;								" +
 						"	DROP TABLE IF EXISTS fact_affiliated_to;							" +

@@ -3,8 +3,23 @@ package MakeTheLink.db;
 import java.sql.*;
 import java.io.IOException;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
+
 
 public class Create_schema {
+	
+	public static void init_schema() throws SQLException, ClassNotFoundException, IOException{
+		Connection conn = Connection_pooling.cpds.getConnection();
+
+		try{
+			create(conn, "curr");
+		}
+		catch(MySQLSyntaxErrorException e){
+		}
+			
+		conn.close();
+	}
+	
 	
 	public static void create(Connection conn, String prfx) throws ClassNotFoundException, SQLException, IOException{
 		

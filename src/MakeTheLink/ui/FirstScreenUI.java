@@ -1,6 +1,8 @@
 package MakeTheLink.ui;
 
 import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -15,16 +17,20 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.*;
 
-public class passwordScreenUI extends AbstractScreenUI{
+import MakeTheLink.core.MakeTheLinkMain;
+
+public class FirstScreenUI extends AbstractScreenUI{
 	//
 	protected String username;
 	protected String password;
 	protected String adress;
 	protected String port;
-	protected String path;
+	protected Label notify;
+	
+	static protected boolean window_busy = false;
 	//protected boolean added = false;
 
-	public passwordScreenUI(Shell shell) {
+	public FirstScreenUI(Shell shell) {
 		super(shell, null, "User Name and Password");
 //		if(added == true){
 //			
@@ -43,9 +49,14 @@ public class passwordScreenUI extends AbstractScreenUI{
 	public void makeWidgets() {
 		
 		Label title = new Label(shell, SWT.NONE);
-		title.setText("Please input your mySql username and your mySql password into the appropriate fields.");
+		title.setText("Please input the appropriate details into the appropriate fields.");
 		GridData data = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 		title.setLayoutData(data);
+		
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		
 		
 		
 		Label labelUser = new Label(shell, SWT.NONE);
@@ -54,6 +65,8 @@ public class passwordScreenUI extends AbstractScreenUI{
 	    data = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 	    usernameText.setLayoutData(data);
 	    usernameText.setText("root");
+	    
+	    new Label(shell, SWT.NONE);
 		
 	    Label labelPassword = new Label(shell, SWT.NONE);
 	    labelPassword.setText("MySql password:");
@@ -62,12 +75,16 @@ public class passwordScreenUI extends AbstractScreenUI{
 	    passwordText.setLayoutData(data);
 	    passwordText.setText("1");
 	    
+	    new Label(shell, SWT.NONE);
+	    
 	    Label labelAdress = new Label(shell, SWT.NONE);
 	    labelAdress.setText("MySql adress:");
 	    final Text adressText = new Text(shell, SWT.BORDER);
 	    data = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 	    adressText.setLayoutData(data);
 	    adressText.setText("127.0.0.1");
+	    
+	    new Label(shell, SWT.NONE);
 	    
 	    Label labelPort = new Label(shell, SWT.NONE);
 	    labelPort.setText("MySql port:");
@@ -76,37 +93,70 @@ public class passwordScreenUI extends AbstractScreenUI{
 	    portText.setLayoutData(data);
 	    portText.setText("3306");
 	    
-	    Label labelPath = new Label(shell, SWT.NONE);
-	    labelPath.setText("Yago files path (followed by a slash):");
-	    final Text pathText = new Text(shell, SWT.BORDER);
-	    data = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-	    pathText.setLayoutData(data);
-	    pathText.setText("/home/user7/Desktop/shared/yago2s_tsv/");
+	    new Label(shell, SWT.NONE);
+	    new Label(shell, SWT.NONE);
+	    new Label(shell, SWT.NONE);
+	    new Label(shell, SWT.NONE);
+	    
 	    
 	    Button ok = new Button(shell, SWT.PUSH);
 		ok.setText("OK");
+	    
+	    notify = new Label(shell, SWT.NONE);
+	    notify.setText("                                                                                    ");
+	    
+
 		
 		ok.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {		                   
-				username = StringEscapeUtils.escapeJava(usernameText.getText());
-				password = StringEscapeUtils.escapeJava(passwordText.getText());
-				adress = StringEscapeUtils.escapeJava(adressText.getText());
-				port = StringEscapeUtils.escapeJava(portText.getText());
-				path =  StringEscapeUtils.escapeJava(pathText.getText());
+			public void widgetSelected(SelectionEvent e) {	
 				
-				MakeTheLink.db.Connection_pooling.set_username(username);
-				MakeTheLink.db.Connection_pooling.set_password(password);
-				MakeTheLink.db.Connection_pooling.set_adress(adress);
-				MakeTheLink.db.Connection_pooling.set_port(port);
-				MakeTheLink.db.Load_yago.set_path(path);
+				if(!window_busy){
+					window_busy = true;
 				
-				try {
-					MakeTheLink.db.Connection_pooling.create_pool();
-				} catch (PropertyVetoException e1) {
-					e1.printStackTrace();
+					username = StringEscapeUtils.escapeJava(usernameText.getText());
+					password = StringEscapeUtils.escapeJava(passwordText.getText());
+					adress = StringEscapeUtils.escapeJava(adressText.getText());
+					port = StringEscapeUtils.escapeJava(portText.getText());
+					
+					MakeTheLink.db.Connection_pooling.set_username(username);
+					MakeTheLink.db.Connection_pooling.set_password(password);
+					MakeTheLink.db.Connection_pooling.set_adress(adress);
+					MakeTheLink.db.Connection_pooling.set_port(port);
+	
+					notify.setText("Trying to connect...");
+					
+					final Runnable runnable = (new Runnable() {
+						public void run() {						
+							try {
+								
+								
+								MakeTheLinkMain.init_conn_and_schema();
+								
+								shell.getDisplay().asyncExec(new Runnable(){
+									public void run(){
+										new MainMenuScreenUI(shell);
+									}
+								});				
+							
+							
+							} catch (Exception e1) {
+								
+								shell.getDisplay().asyncExec(new Runnable(){
+									public void run(){
+										notify.setText("Failed to connect!");
+									}
+								});
+							}
+							
+							window_busy=false;
+						}
+					});
+					MakeTheLink.core.MakeTheLinkMain.threadPool.execute(runnable);
+					
+					
+					
 				}
 				
-				new MainMenuScreenUI(shell);
 			}
 		});
 		

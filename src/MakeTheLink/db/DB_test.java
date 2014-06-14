@@ -32,9 +32,9 @@ public class DB_test {
 		//stmt.executeUpdate("CREATE SCHEMA DbMysql02;");
 		//stmt.executeUpdate("USE DbMysql02;");
 		
-		Create_schema.destroy(conn, "curr");
+		//Create_schema.destroy(conn, "curr");
 		
-		Create_schema.create(conn, "curr");
+		//Create_schema.create(conn, "curr");
 		
 		//Load_yago.set_path("/home/user7/Desktop/shared/yago2s_tsv/");
 		//Load_yago.load_yago();

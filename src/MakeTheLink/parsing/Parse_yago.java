@@ -32,17 +32,17 @@ public class Parse_yago {
 			data = line.split("\t");
 			
 			if ("<hasCapital>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_facts(data, has_capital);
+				MakeTheLink.db.Load_yago_funcs.insert_facts(data, has_capital);
 			if ("<playsFor>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_facts(data, plays_for);
+				MakeTheLink.db.Load_yago_funcs.insert_facts(data, plays_for);
 			if ("<isLocatedIn>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_facts(data, located_in);
+				MakeTheLink.db.Load_yago_funcs.insert_facts(data, located_in);
 			if ("<actedIn>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_facts(data, acted_in);
+				MakeTheLink.db.Load_yago_funcs.insert_facts(data, acted_in);
 			if ("<created>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_facts(data, created);
+				MakeTheLink.db.Load_yago_funcs.insert_facts(data, created);
 			if ("<isAffiliatedTo>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_facts(data, affiliated_to);
+				MakeTheLink.db.Load_yago_funcs.insert_facts(data, affiliated_to);
 		}
 
 		reader.close();
@@ -70,15 +70,15 @@ public class Parse_yago {
 			data = line.split("\t");
 			
 			if ("<hasGDP>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_literal_facts(data, gdp);
+				MakeTheLink.db.Load_yago_funcs.insert_literal_facts(data, gdp);
 			if ("<hasNumberOfPeople>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_literal_facts(data, population);
+				MakeTheLink.db.Load_yago_funcs.insert_literal_facts(data, population);
 			if ("<hasArea>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_literal_facts(data, area);
+				MakeTheLink.db.Load_yago_funcs.insert_literal_facts(data, area);
 			if ("<wasCreatedOnDate>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_literal_facts(data, creation_date);
+				MakeTheLink.db.Load_yago_funcs.insert_literal_facts(data, creation_date);
 			if ("<wasBornOnDate>".equals(data[2]))
-				MakeTheLink.db.Load_yago.insert_literal_facts(data, birth_date);
+				MakeTheLink.db.Load_yago_funcs.insert_literal_facts(data, birth_date);
 		}
 		
 		reader.close();
@@ -111,14 +111,14 @@ public class Parse_yago {
 			data = line.split("\t");
 			
 			if ("<yagoGeoEntity>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, geo);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, geo);
 			if ("<wikicategory_Football_clubs_in_Israel>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, soccer_clubs_isr);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, soccer_clubs_isr);
 			if ("<wikicategory_La_Liga_clubs>".equals(data[3]) ||
 				"<wikicategory_Premier_League_clubs>".equals(data[3]) ||
 				"<wikicategory_Serie_A_clubs>".equals(data[3]) ||
 				"<wikicategory_G-14_clubs>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, soccer_clubs_world);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, soccer_clubs_world);
 			if ("<wikicategory_New_Zealand_film_actors>".equals(data[3]) ||
 				"<wikicategory_Australian_film_actors>".equals(data[3]) ||
 				"<wikicategory_American_film_actors>".equals(data[3]) ||
@@ -128,58 +128,58 @@ public class Parse_yago {
 				"<wikicategory_Welsh_film_actors>".equals(data[3]) ||
 				"<wikicategory_English_film_actors>".equals(data[3]) ||
 				"<wikicategory_British_film_actors>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, actors);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, actors);
 			if ("<wordnet_music_107020895>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, music);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, music);
 			if ("<wordnet_musician_110339966>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, musicians);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, musicians);
 			if ("<wordnet_musical_organization_108246613>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, music_org);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, music_org);
 			if ("<wikicategory_National_Basketball_Association_teams>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, nba_clubs);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, nba_clubs);
 			if ("<wordnet_basketball_player_109842047>".equals(data[3]))
-				MakeTheLink.db.Load_yago.insert_types(data, bbl_players);
+				MakeTheLink.db.Load_yago_funcs.insert_types(data, bbl_players);
 			
 			if (data[3].matches("(.*)_films>") && data[3].matches("<wikicategory(.*)")){
 				
 				if (data[3].matches("(.*)action_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, action);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, action);
 				if (data[3].matches("(.*)adventure_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, adventure);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, adventure);
 				if (data[3].matches("(.*)animated_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, animated);	
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, animated);	
 				if (data[3].matches("(.*)comedy_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, comedy);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, comedy);
 				if (data[3].matches("(.*)crime_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, crime);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, crime);
 				if (data[3].matches("(.*)documentary_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, documentary);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, documentary);
 				if (data[3].matches("(.*)drama_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, drama);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, drama);
 				if (data[3].matches("(.*)fantasy_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, fantasy);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, fantasy);
 				if (data[3].matches("(.*)horror_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, horror);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, horror);
 				if (data[3].matches("(.*)musical_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, musical);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, musical);
 				if (data[3].matches("(.*)mystery_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, mystery);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, mystery);
 				if (data[3].matches("(.*)romance_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, romance);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, romance);
 				if (data[3].matches("(.*)science_fiction_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, science_fiction);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, science_fiction);
 				if (data[3].matches("(.*)sports_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, sports);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, sports);
 				if (data[3].matches("(.*)teen_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, teen);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, teen);
 				if (data[3].matches("(.*)television_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, television);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, television);
 				if (data[3].matches("(.*)thriller_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, thriller);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, thriller);
 				if (data[3].matches("(.*)war_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, war);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, war);
 				if (data[3].matches("(.*)Western_films>"))
-					MakeTheLink.db.Load_yago.insert_types(data, western);
+					MakeTheLink.db.Load_yago_funcs.insert_types(data, western);
 			}
 		}
 		

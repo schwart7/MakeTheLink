@@ -90,12 +90,12 @@ public class MainMenuScreenUI extends AbstractScreenUI {
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				new chooseUpdateUI(shell);
+				new ChooseUpdateUI(shell);
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				new chooseUpdateUI(shell);
+				new ChooseUpdateUI(shell);
 
 			}
 
