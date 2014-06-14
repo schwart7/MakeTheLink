@@ -106,6 +106,12 @@ public class GamePropetiesScreenUI extends AbstractScreenUI {
 					errorBox.open();
 					return;
 				}
+				if(curPlayers.size() > 9){
+					MessageBox errorBox = new MessageBox(shell, SWT.ICON_ERROR);
+					errorBox.setMessage("Ten players already listed: cannot add more!");
+					errorBox.open();
+					return;
+				}
 				if (!inputText.equals("")) {
 					players.add(input_players.getText());
 					input_players.setText("");
