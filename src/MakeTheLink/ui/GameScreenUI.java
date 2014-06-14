@@ -121,7 +121,8 @@ public class GameScreenUI extends AbstractScreenUI {
 		this.score_group = new Group(this.gameInformation, 0);
 		this.score_group.setLayout(new GridLayout(1, false));
 
-		this.clues_list = new List(this.shell, 2562);
+		
+		this.clues_list = new List(this.shell, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.VIRTUAL);
 		this.clues_list.setFont(this.font);
 		data = new GridData(GridData.FILL_BOTH);
 		data.horizontalSpan = 3;
@@ -192,11 +193,13 @@ public class GameScreenUI extends AbstractScreenUI {
 		startTimerUI();
 		
 		Display display = Display.getDefault();
-		display.asyncExec(new Runnable() {
+		display.syncExec(new Runnable() {
 			public void run() {
 				GameScreenUI.this.round_label.setText("Round: "
 						+ GameScreenUI.this.round);
+				
 				GameScreenUI.this.shell.layout();
+
 			}
 		});
 		runIteration();
@@ -280,12 +283,13 @@ public class GameScreenUI extends AbstractScreenUI {
 
 		String clue = thisQuestion.getHintsList()[0];
 		this.clues_list.add(clue);
-
+		
 		clueGenrator = new CluesRunnable(thisQuestion, this.clues_list);
 		MakeTheLinkMain.threadPool.execute(clueGenrator);
 
 		ShellUtil.isKeyListenerDisposed = 0;
 		createAnswerListener();
+
 	}
 
 	private void userWasRight() {
@@ -326,10 +330,14 @@ public class GameScreenUI extends AbstractScreenUI {
  * if he don't choose an answer, then it is like he choose the wrong answer.
  */
 	private void createAnswerListener() {
+		
 		answerListener = new Listener() {
 			
 			@Override
 			public void handleEvent(Event event) {
+				
+				System.out.println("2222222222222222222222222222222222222222222");
+				
 				if (isListenerActivate){ 
 					//if some one already preesed a key wont let him press again for 4 sec
 					return;
@@ -343,6 +351,9 @@ public class GameScreenUI extends AbstractScreenUI {
 						isListenerActivate = false;
 						return;
 					}
+					
+					
+					
 					String playerKey = ""+GameScreenUI.this.playersAndKeys.get(playerName);
 					String eventKey = "" + event.character;
 					if (playerKey.equals(eventKey)) { 
@@ -353,6 +364,8 @@ public class GameScreenUI extends AbstractScreenUI {
 						//allow player to choose an answer
 						GameScreenUI.this.answers_group.setEnabled(true);
 
+						System.out.println("33333333333333333333333333333333333333333333333333");
+						
 						currentAnsweringUser = playerName;
 						Runnable keyChecker = new Runnable() {
 							public void run() {
@@ -419,7 +432,9 @@ public class GameScreenUI extends AbstractScreenUI {
 			
 		};
 		
-		Display.getDefault().addFilter(SWT.KeyDown, answerListener);
+		
+		Display.getDefault().addFilter(SWT.KeyDown , answerListener);
+
 	}
 	
 

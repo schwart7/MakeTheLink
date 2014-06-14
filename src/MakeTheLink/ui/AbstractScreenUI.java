@@ -1,6 +1,8 @@
 package MakeTheLink.ui;
 
 import java.util.Map;
+
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -12,7 +14,7 @@ public abstract class AbstractScreenUI implements ScreenGui {
 	public AbstractScreenUI(Shell shell, Map<String, Integer> playersAndKeys,
 			String shellText) {
 		if (answerListener != null) {
-			Display.getDefault().removeFilter(1, answerListener);
+			Display.getDefault().removeFilter(SWT.KeyDown, answerListener);
 		}
 		this.shell = shell;
 		this.shell.setText(shellText);
