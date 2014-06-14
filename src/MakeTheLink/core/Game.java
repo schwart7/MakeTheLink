@@ -28,8 +28,8 @@ public class Game {
 			this.playerNameAndScore.put(player, Integer.valueOf(0));
 		}
 		this.thisConnection = new Generate_game_questions();
-		this.thisConnection.setQuestionOps(this.CategoryMap,
-				this.DifficultLevel);
+		//this.thisConnection.setQuestionOps(this.CategoryMap,
+		//		this.DifficultLevel);
 		this.thisQuestions = Generate_game_questions.genrateQuestions(NumOfRounds);
 		this.curQuestion = this.thisQuestions[0];
 	}

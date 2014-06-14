@@ -223,7 +223,7 @@ public class GameScreenUI extends AbstractScreenUI {
 //		data.horizontalSpan = 2;
 
 		Label winnerLabel = new Label(endScreen, SWT.FILL);
-		winnerLabel.setText("Game end -- the winer is:"  + winnerName + " with score of " + winnerScorer);
+		winnerLabel.setText("Game Over! and The Winner is: "  + winnerName + " with score of " + winnerScorer);
 		winnerLabel.setLayoutData(data);
 
 		data = new GridData(GridData.FILL_BOTH);

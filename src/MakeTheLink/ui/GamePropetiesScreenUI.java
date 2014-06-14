@@ -1,5 +1,8 @@
 package MakeTheLink.ui;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,6 +32,8 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+
+import MakeTheLink.core.Generate_game_questions;
 
 public class GamePropetiesScreenUI extends AbstractScreenUI {
 	private Composite categorySelectionScreen;
@@ -149,7 +154,7 @@ public class GamePropetiesScreenUI extends AbstractScreenUI {
 			public void mouseDown(MouseEvent e) {
 				if(players.getItems().length == 0){
 					MessageBox errorBox = new MessageBox(shell, SWT.ICON_ERROR);
-					errorBox.setMessage("Cant start game with no players");
+					errorBox.setMessage("You cannot start game with no players!");
 					errorBox.open();
 					return;
 				}
@@ -260,8 +265,24 @@ public class GamePropetiesScreenUI extends AbstractScreenUI {
 
 		next_comp.addMouseListener(new MouseAdapter() {
 			public void mouseDown(MouseEvent e) {
-				((StackLayout) GamePropetiesScreenUI.this.shell.getLayout()).topControl = GamePropetiesScreenUI.this.playerSelectionScreen;
-				GamePropetiesScreenUI.this.shell.layout();
+				
+				try {
+					if(0 < new Generate_game_questions().setQuestionOps(
+							GamePropetiesScreenUI.this.getCategorySelection(),
+							GamePropetiesScreenUI.this.difficultyScale.getSelection())){
+						
+						((StackLayout) GamePropetiesScreenUI.this.shell.getLayout()).topControl = GamePropetiesScreenUI.this.playerSelectionScreen;
+						GamePropetiesScreenUI.this.shell.layout();
+						
+					}
+					
+				} catch (ClassNotFoundException | SQLException | IOException
+						| PropertyVetoException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+
 			}
 		});
 	}
