@@ -26,7 +26,7 @@ public class DB_test {
 		Connection_pooling.set_username("root");
 		Connection_pooling.create_pool();
 		Connection conn = Connection_pooling.cpds.getConnection();
-		
+	
 		Statement stmt = conn.createStatement();
 
 		//stmt.executeUpdate("CREATE SCHEMA DbMysql02;");
@@ -36,15 +36,15 @@ public class DB_test {
 		
 		Create_schema.create(conn, "curr");
 		
+		//Load_yago.set_path("/home/user7/Desktop/shared/yago2s_tsv/");
+		//Load_yago.load_yago();
 		
-		//Load_yago.load_yago( path);
 		
 		
-		
-		conn.setAutoCommit(false);
-		Copy_tmp_to_curr.copy(conn);
-		conn.commit();
-		conn.setAutoCommit(true);
+		//conn.setAutoCommit(false);
+		//Copy_tmp_to_curr.copy(conn);
+		//conn.commit();
+		//conn.setAutoCommit(true);
 		
 		
 		/*

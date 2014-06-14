@@ -23,6 +23,7 @@ public class MakeTheLinkMain {
 		new passwordScreenUI(shell);
 		ShellUtil.openShell(shell);
 		threadPool.shutdown();
-		MakeTheLink.db.Connection_pooling.cpds.close();
+		if(MakeTheLink.db.Connection_pooling.cpds!=null)
+			MakeTheLink.db.Connection_pooling.cpds.close();
 	}
 }

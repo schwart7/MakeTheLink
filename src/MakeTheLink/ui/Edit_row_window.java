@@ -85,7 +85,7 @@ public class Edit_row_window {
 					display.sleep();
 				}
 			}
-			display.dispose();
+			//shell.close();
 		}
 	}
 

@@ -21,6 +21,7 @@ public class passwordScreenUI extends AbstractScreenUI{
 	protected String password;
 	protected String adress;
 	protected String port;
+	protected String path;
 	//protected boolean added = false;
 
 	public passwordScreenUI(Shell shell) {
@@ -75,25 +76,33 @@ public class passwordScreenUI extends AbstractScreenUI{
 	    portText.setLayoutData(data);
 	    portText.setText("3306");
 	    
+	    Label labelPath = new Label(shell, SWT.NONE);
+	    labelPath.setText("Yago files path (followed by a slash):");
+	    final Text pathText = new Text(shell, SWT.BORDER);
+	    data = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+	    pathText.setLayoutData(data);
+	    pathText.setText("/home/user7/Desktop/shared/yago2s_tsv/");
+	    
 	    Button ok = new Button(shell, SWT.PUSH);
 		ok.setText("OK");
 		
 		ok.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {		                   
-				username = StringEscapeUtils.escapeSql(usernameText.getText());
-				password = StringEscapeUtils.escapeSql(passwordText.getText());
-				adress = StringEscapeUtils.escapeSql(adressText.getText());
-				port = StringEscapeUtils.escapeSql(portText.getText());
+				username = StringEscapeUtils.escapeJava(usernameText.getText());
+				password = StringEscapeUtils.escapeJava(passwordText.getText());
+				adress = StringEscapeUtils.escapeJava(adressText.getText());
+				port = StringEscapeUtils.escapeJava(portText.getText());
+				path =  StringEscapeUtils.escapeJava(pathText.getText());
 				
 				MakeTheLink.db.Connection_pooling.set_username(username);
 				MakeTheLink.db.Connection_pooling.set_password(password);
 				MakeTheLink.db.Connection_pooling.set_adress(adress);
 				MakeTheLink.db.Connection_pooling.set_port(port);
+				MakeTheLink.db.Load_yago.set_path(path);
 				
 				try {
 					MakeTheLink.db.Connection_pooling.create_pool();
 				} catch (PropertyVetoException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				

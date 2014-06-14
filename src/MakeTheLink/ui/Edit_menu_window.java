@@ -69,7 +69,6 @@ public class Edit_menu_window extends Shell {
 						display.sleep();
 					}
 				}
-				display.dispose();
 			} catch (Exception e) {
 				e.printStackTrace();
 				menu_open=false;

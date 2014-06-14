@@ -53,15 +53,17 @@ public class ShellUtil {
 
 			@Override
 			public void handleEvent(Event event) {
-				GameScreenUI.clueGenrator.terminate();
-				GameScreenUI.timerWidget.dispose();
+				
+				if(GameScreenUI.clueGenrator!=null)
+					GameScreenUI.clueGenrator.terminate();
+				
+				if(GameScreenUI.timerWidget!=null)
+					GameScreenUI.timerWidget.dispose();
+				
 				isKeyListenerDisposed = 1;
 				MakeTheLinkMain.threadPool.shutdownNow();
 				
 			}
-			
-			
 		});
-		
 	}
 }

@@ -6,6 +6,12 @@ import java.sql.*;
 import java.util.Map;
 import java.io.IOException;
 
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TableItem;
+
+import MakeTheLink.ui.Edit_menu_window;
+import MakeTheLink.ui.chooseUpdateUI;
+
 public class Load_yago {
 	
 	private static String yago_file_path = "";
@@ -20,7 +26,7 @@ public class Load_yago {
 		yago_file_path=str;
 	}
 	//the main course of loading yago files to schema is managed here
-	public static void load_yago()
+	public static void load_yago(chooseUpdateUI ui)
 			 throws ClassNotFoundException, SQLException, IOException{
 		
 		conn = Connection_pooling.cpds.getConnection();
@@ -31,32 +37,32 @@ public class Load_yago {
 		Create_schema.destroy(conn, "tmp");
 		Create_schema.create(conn, "tmp");
 		
-		yago_loading_progress = "Loading facts (0% completed)";
+		ui.update_load_progress("Loading facts (0% completed)");
 		load_facts(yago_file_path);
-		yago_loading_progress = "Loading literal facts (20% completed)";
+		ui.update_load_progress("Loading literal facts (20% completed)");
 		load_literal_facts(yago_file_path);
-		yago_loading_progress = "Loading types (30% completed)";
+		ui.update_load_progress("Loading types (30% completed)");
 		load_types(yago_file_path);
-		yago_loading_progress = "Loading wikipedia info (50% completed)";
+		ui.update_load_progress("Loading wikipedia info (50% completed)");
 		load_wiki(yago_file_path);
 		
-		yago_loading_progress = "Populating music (70% completed)";
+		ui.update_load_progress("Populating music (70% completed)");
 		Populate_tmp_schema.populate_music(conn);
 
-		yago_loading_progress = "Populating cinema (75% completed)";
+		ui.update_load_progress("Populating cinema (75% completed)");
 		Populate_tmp_schema.populate_cinema(conn);
 		
-		yago_loading_progress = "Populating places (80% completed)";
+		ui.update_load_progress("Populating places (80% completed)");
 		Populate_tmp_schema.populate_places(conn);
 
 		
-		yago_loading_progress = "Populating sports (95% completed)";
+		ui.update_load_progress("Populating sports (95% completed)");
 		Populate_tmp_schema.populate_sports(conn);
 		
 		clean_aux();
 		Populate_tmp_schema.clean_aux(conn);
 
-		yago_loading_progress = "Populating main schema (99% completed)";
+		ui.update_load_progress("Populating main schema (99% completed)");
 		
 		//copy yago data from tmp to curr
 
@@ -69,9 +75,7 @@ public class Load_yago {
 
 		conn.close();
 		
-		yago_loading_progress = "Yago loaded";
-
-		
+		ui.update_load_progress("Yago loaded");
 	}
 	
 	private static PreparedStatement[] pstmt_facts = new PreparedStatement[6];

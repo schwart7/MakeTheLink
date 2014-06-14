@@ -1,4 +1,4 @@
-package MakeTheLink.db;
+package MakeTheLink.core;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
-import MakeTheLink.core.Question;
+import MakeTheLink.db.Connection_pooling;
+import MakeTheLink.db.Generate_a_question;
+import MakeTheLink.db.Questions_set_level;
 
 
 public class Generate_game_questions {
