@@ -456,7 +456,8 @@ public class Populate_tmp_schema {
 		
 	}
 	
-	public static void clean_aux(Connection conn) throws SQLException{
+	public static void clean_aux() throws SQLException{
+		Connection conn = Connection_pooling.cpds.getConnection();
 		Statement stmt = conn.createStatement();
 		stmt.execute(	"	DROP TABLE IF EXISTS actors_movies;										" +
 						"	DROP TABLE IF EXISTS artists;											" +
@@ -467,6 +468,7 @@ public class Populate_tmp_schema {
 						"	DROP TABLE IF EXISTS countries_locations;								" +
 						"	DROP TABLE IF EXISTS players_teams;										");	
 		stmt.close();
+		conn.close();
 	}
 }
 

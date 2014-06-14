@@ -13,6 +13,7 @@ public class Create_schema {
 
 		try{
 			create(conn, "curr");
+			create(conn, "tmp");
 		}
 		catch(MySQLSyntaxErrorException e){
 		}
@@ -29,31 +30,42 @@ public class Create_schema {
 		create_sports(conn, prfx);
 	}
 	
-	public static void destroy(Connection conn, String prfx) throws SQLException{
+	public static void delete(String prfx) throws SQLException{
+		Connection conn = Connection_pooling.cpds.getConnection();
+		conn.setAutoCommit(false);
 		Statement stmt = conn.createStatement();
-		stmt.execute(	"	DROP TABLE IF EXISTS "+prfx+"_cinema_actor_movie;						" +
-						"	DROP TABLE IF EXISTS "+prfx+"_cinema_movie_tag;						" +
-						"	DROP TABLE IF EXISTS "+prfx+"_places_location_country;				" +
-						"	DROP TABLE IF EXISTS "+prfx+"_israeli_soccer_player_team;				" +
-						"	DROP TABLE IF EXISTS "+prfx+"_music_artist_creation;					" +
-						"	DROP TABLE IF EXISTS "+prfx+"_nba_player_team;						" +
-						"	DROP TABLE IF EXISTS "+prfx+"_world_soccer_player_team;				" +
-						
-						"	DROP TABLE IF EXISTS "+prfx+"_cinema_actors;							" +
-						"	DROP TABLE IF EXISTS "+prfx+"_cinema_movies;							" +
-						"	DROP TABLE IF EXISTS "+prfx+"_cinema_tags;							" +
-						"	DROP TABLE IF EXISTS "+prfx+"_places_countries;						" +
-						"	DROP TABLE IF EXISTS "+prfx+"_places_locations;						" +
-						"	DROP TABLE IF EXISTS "+prfx+"_music_artists;							" +
-						"	DROP TABLE IF EXISTS "+prfx+"_music_creations;						" +
-						"	DROP TABLE IF EXISTS "+prfx+"_israeli_soccer_players;					" +
-						"	DROP TABLE IF EXISTS "+prfx+"_israeli_soccer_teams;					" +
-						"	DROP TABLE IF EXISTS "+prfx+"_nba_players;							" +
-						"	DROP TABLE IF EXISTS "+prfx+"_nba_teams;								" +
-						"	DROP TABLE IF EXISTS "+prfx+"_world_soccer_players;					" +
-						"	DROP TABLE IF EXISTS "+prfx+"_world_soccer_teams;						");		
+		try {
+			stmt.execute(	"	DELETE FROM "+prfx+"_cinema_actor_movie;						" +
+							"	DELETE FROM "+prfx+"_cinema_movie_tag;						" +
+							"	DELETE FROM "+prfx+"_places_location_country;				" +
+							"	DELETE FROM "+prfx+"_israeli_soccer_player_team;				" +
+							"	DELETE FROM "+prfx+"_music_artist_creation;					" +
+							"	DELETE FROM "+prfx+"_nba_player_team;						" +
+							"	DELETE FROM "+prfx+"_world_soccer_player_team;				" +
+							
+							"	DELETE FROM "+prfx+"_cinema_actors;							" +
+							"	DELETE FROM "+prfx+"_cinema_movies;							" +
+							"	DELETE FROM "+prfx+"_cinema_tags;							" +
+							"	DELETE FROM "+prfx+"_places_countries;						" +
+							"	DELETE FROM "+prfx+"_places_locations;						" +
+							"	DELETE FROM "+prfx+"_music_artists;							" +
+							"	DELETE FROM "+prfx+"_music_creations;						" +
+							"	DELETE FROM "+prfx+"_israeli_soccer_players;					" +
+							"	DELETE FROM "+prfx+"_israeli_soccer_teams;					" +
+							"	DELETE FROM "+prfx+"_nba_players;							" +
+							"	DELETE FROM "+prfx+"_nba_teams;								" +
+							"	DELETE FROM "+prfx+"_world_soccer_players;					" +
+							"	DELETE FROM "+prfx+"_world_soccer_teams;						");	
+			
+			conn.commit();
+		}
+		catch (Exception e){
+			conn.rollback();
+		}
 		
+		conn.setAutoCommit(true);
 		stmt.close();
+		conn.close();
 	}
 	/*
 	public static void change_prefix(Connection conn, String prev, String newPrfx) throws SQLException{

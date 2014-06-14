@@ -31,10 +31,7 @@ public class Load_yago {
 		Load_yago_funcs.conn = Connection_pooling.cpds.getConnection();
 		
 		Load_yago_funcs.clean_aux();
-		Populate_tmp_schema.clean_aux(Load_yago_funcs.conn);
-		
-		Create_schema.destroy(Load_yago_funcs.conn, "tmp");
-		Create_schema.create(Load_yago_funcs.conn, "tmp");
+		Populate_tmp_schema.clean_aux();
 		
 		ui.update_load_progress("Loading facts (0% completed)");
 		Load_yago_funcs.load_facts(yago_file_path);
@@ -45,13 +42,15 @@ public class Load_yago {
 		ui.update_load_progress("Loading wikipedia info (50% completed)");
 		Load_yago_funcs.load_wiki(yago_file_path);
 		
-		ui.update_load_progress("Populating music (70% completed)");
+		Create_schema.delete("tmp");
+		
+		ui.update_load_progress("Populating music (75% completed)");
 		Populate_tmp_schema.populate_music(Load_yago_funcs.conn);
 
-		ui.update_load_progress("Populating cinema (75% completed)");
+		ui.update_load_progress("Populating cinema (80% completed)");
 		Populate_tmp_schema.populate_cinema(Load_yago_funcs.conn);
 		
-		ui.update_load_progress("Populating places (80% completed)");
+		ui.update_load_progress("Populating places (82% completed)");
 		Populate_tmp_schema.populate_places(Load_yago_funcs.conn);
 
 		
@@ -59,26 +58,30 @@ public class Load_yago {
 		Populate_tmp_schema.populate_sports(Load_yago_funcs.conn);
 		
 		Load_yago_funcs.clean_aux();
-		Populate_tmp_schema.clean_aux(Load_yago_funcs.conn);
+		Populate_tmp_schema.clean_aux();
 
 		ui.update_load_progress("Copying data from temporary tables (99% completed)");
 		
-		//copy yago data from tmp to curr
-		Load_yago_funcs.conn.setAutoCommit(false);
-		Copy_tmp_to_curr.copy(Load_yago_funcs.conn);
-		Load_yago_funcs.conn.commit();
-		Load_yago_funcs.conn.setAutoCommit(true);
-
-		Create_schema.destroy(Load_yago_funcs.conn, "tmp");
-
 		Load_yago_funcs.conn.close();
+		
+		//copy yago data from tmp to curr
+		copy_from_tmp_to_curr();
+		
 		
 		ui.update_load_progress("Yago loaded");
 	}
 	
 	public static void clean_tmp() throws SQLException{
 		Load_yago_funcs.clean_aux();
-		Populate_tmp_schema.clean_aux(Load_yago_funcs.conn);
-		Create_schema.destroy(Load_yago_funcs.conn, "tmp");
+		Populate_tmp_schema.clean_aux();
+	}
+	
+	public static void copy_from_tmp_to_curr() throws SQLException, ClassNotFoundException, IOException{
+		Connection conn = Connection_pooling.cpds.getConnection();
+		conn.setAutoCommit(false);
+		Copy_tmp_to_curr.copy(conn);
+		conn.commit();
+		conn.setAutoCommit(true);
+		conn.close();
 	}
 }

@@ -52,15 +52,6 @@ public class MainMenuScreenUI extends AbstractScreenUI {
 				"button&stuff/startGameButton3.png");
 		newGameButton.setImage(image);
 		newGameButton.setLayoutData(data);
-
-
-		Label instructionsButton = new Label(shell, SWT.RIGHT);
-		image = new Image(Display.getDefault(),
-				"button&stuff/instructions3.png");
-		instructionsButton.setBackground(Display.getCurrent().getSystemColor(
-				SWT.COLOR_DARK_BLUE));
-		instructionsButton.setImage(image);
-		instructionsButton.setLayoutData(data);
 		
 		
 		Label updateButton = new Label(shell, SWT.RIGHT);

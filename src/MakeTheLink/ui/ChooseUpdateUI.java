@@ -23,7 +23,7 @@ import MakeTheLink.db.Load_yago_funcs;
 
 public class ChooseUpdateUI extends AbstractScreenUI{
 	
-	private Label label_update_status;
+	private Label label_status;
 	private Text pathText;
 	
 	public boolean window_busy = false;
@@ -42,35 +42,103 @@ public class ChooseUpdateUI extends AbstractScreenUI{
 	@Override
 	public void makeWidgets() {
 		
-		Button manualUpdate = new Button(shell, SWT.PUSH);
-		manualUpdate.setText("Manual Update");
-		
-		new Label(shell, SWT.NONE);
-		new Label(shell, SWT.NONE);
-		new Label(shell, SWT.NONE);
-		
-		
-		
 	    Label labelPath = new Label(shell, SWT.NONE);
 	    labelPath.setText("Yago files path (followed by a slash):");
+
 	    pathText = new Text(shell, SWT.BORDER);
 	    pathText.setText("/home/user7/Desktop/shared/yago2s_tsv/                                               "+
 	    "                                                                                                       ");
 		
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+	    
 		Button fullUpdate = new Button(shell, SWT.PUSH);
 		fullUpdate.setText("Perform Full Update from YAGO files");
+	    	    
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
 		
-	    label_update_status = new Label(shell, SWT.NONE);
-	    label_update_status.setText("                                                                       "+
+		
+		Button manualUpdate = new Button(shell, SWT.PUSH);
+		manualUpdate.setText("Manual Update");
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		Button yagoBackupUpdate = new Button(shell, SWT.PUSH);
+		yagoBackupUpdate.setText("Update from YAGO backup");
+
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		
+		Label status_text = new Label(shell, SWT.NONE);
+		status_text.setText("STATUS:");
+	    label_status = new Label(shell, SWT.NONE);
+	    label_status.setText("waiting for user selection                                                     "+
 	    "                                                                                                    "+
 	    "                                                                                                    ");
+		
+	    Button back = new Button(shell, SWT.PUSH);
+		back.setText("Back");
+		
+		yagoBackupUpdate.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {	
+				
+				if(!window_busy){
+					window_busy=true;
+					
+					label_status.setText("Performing update from YAGO backup...");
+					
+					final Runnable runnable = (new Runnable() {
+						public void run() {						
+							try {
+								MakeTheLink.core.Load_yago.copy_from_tmp_to_curr();
+								
+								shell.getDisplay().asyncExec(new Runnable(){
+									public void run(){
+										label_status.setText("YAGO backup loaded successfully."+
+										" waiting for user selection");
+										
+										window_busy=false;
+									}
+								});
+							} catch (Exception e1) {
+								
+								shell.getDisplay().asyncExec(new Runnable(){
+									public void run(){
+										label_status.setText("Failed to perform update from YAGO backup!"+
+												 " waiting for user selection");
+										window_busy=false;
+									}
+								});
+							}  
+						}
+					});
+					MakeTheLink.core.MakeTheLinkMain.threadPool.execute(runnable);
+					
+
+					
+					//window_busy=false;
+				}
+				
+
+			}
+		});
 	    
 		new Label(shell, SWT.NONE);
 		new Label(shell, SWT.NONE);
 		new Label(shell, SWT.NONE);
 		
-		Button back = new Button(shell, SWT.PUSH);
-		back.setText("Back");
+		
+
+		
+
+		
+
+	    
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		
+
 		
 		fullUpdate.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {	
@@ -78,6 +146,7 @@ public class ChooseUpdateUI extends AbstractScreenUI{
 				if(!window_busy){
 					window_busy=true;
 					
+					label_status.setText("Preparing to load from YAGO files...");
 					
 					MakeTheLink.core.Load_yago.set_path(pathText.getText());
 					
@@ -89,7 +158,8 @@ public class ChooseUpdateUI extends AbstractScreenUI{
 								
 								shell.getDisplay().asyncExec(new Runnable(){
 									public void run(){
-										label_update_status.setText("Failed to perform update from yago files!");
+										label_status.setText("Failed to perform update from yago files!" +
+												 " waiting for user selection");
 										window_busy=false;
 									}
 								});
@@ -111,13 +181,19 @@ public class ChooseUpdateUI extends AbstractScreenUI{
 			public void widgetSelected(SelectionEvent e) {		                   
 				if(!window_busy){
 					window_busy=true;
+					
+					label_status.setText("Performing manual update... ");
+					
 					try {
 						Edit_menu_window.open_window();
+						
+						label_status.setText("waiting for user selection");
+						window_busy=false;
 					} catch (PropertyVetoException e1) {
 						e1.printStackTrace();
 					}
 					
-					window_busy=false;
+
 				}
 			}
 		});
@@ -138,12 +214,11 @@ public class ChooseUpdateUI extends AbstractScreenUI{
 			public void run(){
 				String loading_note = "Loading yago in progress, please do not close this window: ";
 				if(progress.compareTo("Yago loaded")==0){
-					loading_note = "";
+					label_status.setText("YAGO loaded successfully. waiting for user selection");
 					window_busy=false;
 				}
-				
-				
-				label_update_status.setText(loading_note+progress);
+				else
+					label_status.setText(loading_note+progress+"...");
 			}
 		});
 	}

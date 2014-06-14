@@ -97,7 +97,7 @@ public class GamePropetiesScreenUI extends AbstractScreenUI {
 				java.util.List<String> curPlayers = Arrays.asList(players.getItems());
 				if (curPlayers.contains(inputText)){
 					MessageBox errorBox = new MessageBox(shell, SWT.ICON_ERROR);
-					errorBox.setMessage("Player name already exist");
+					errorBox.setMessage("Player name already exists");
 					errorBox.open();
 					return;
 				}

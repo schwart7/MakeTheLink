@@ -188,6 +188,7 @@ public class Load_yago_funcs {
 	}
 	
 	public static void clean_aux() throws SQLException{
+		Connection conn = Connection_pooling.cpds.getConnection();
 		Statement stmt = conn.createStatement();
 		stmt.execute(	"	DROP TABLE IF EXISTS fact_acted_in;								" +
 						"	DROP TABLE IF EXISTS fact_affiliated_to;							" +
@@ -234,5 +235,6 @@ public class Load_yago_funcs {
 						
 						"	DROP TABLE IF EXISTS wiki_links;									");	
 		stmt.close();
+		conn.close();
 	}
 }
