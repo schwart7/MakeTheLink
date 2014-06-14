@@ -85,6 +85,7 @@ public class GameScreenUI extends AbstractScreenUI {
 				new String[playersAndKeys.keySet().size()]));
 
 		this.players_label = new Label[this.players.length];
+		
 	}
 
 	private void setPlayersScore() {
@@ -127,13 +128,15 @@ public class GameScreenUI extends AbstractScreenUI {
 		this.score_group.setLayout(new GridLayout(1, false));
 
 		
-		this.clues_list = new Table(this.shell, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.VIRTUAL);
-		TableColumn id_column = new TableColumn(clues_list, SWT.CENTER);
+		this.clues_list = new Table(this.shell, SWT.BORDER | SWT.MULTI);
+		
 		this.clues_list.setFont(this.font);
 		data = new GridData(GridData.FILL_BOTH);
 		data.horizontalSpan = 3;
 		this.clues_list.setLayoutData(data);
-		this.clues_list.setEnabled(true);
+		this.clues_list.setEnabled(false);
+		clues_list.setBackground(Display.getCurrent().getSystemColor(
+				SWT.COLOR_WHITE));
 		
 		
 		this.answers_group = new Group(this.shell, 0);
@@ -147,6 +150,9 @@ public class GameScreenUI extends AbstractScreenUI {
 
 		clues_list.forceFocus();
 
+		Button button = new Button(shell, SWT.PUSH);
+		button.setFocus();
+		
 		Shell wait = new Shell(Display.getCurrent(), SWT.ON_TOP);
 		createWaitingShell(wait);
 		wait.pack();
@@ -294,9 +300,14 @@ public class GameScreenUI extends AbstractScreenUI {
 
 		String clue = thisQuestion.getHintsList()[0];
 		
-		TableItem clue_item = new TableItem(clues_list, 300);
+		TableItem clue_item = new TableItem(clues_list, SWT.NONE);
+		clues_list.setEnabled(false);
+		clues_list.setBackground(Display.getCurrent().getSystemColor(
+				SWT.COLOR_WHITE));
+		clues_list.setForeground(Display.getCurrent().getSystemColor(
+				SWT.COLOR_WHITE));
 		clue_item.setText(clue);
-		clues_list.showItem(clue_item);
+		clues_list.redraw();
 		
 		clueGenrator = new CluesRunnable(thisQuestion, this.clues_list);
 		MakeTheLinkMain.threadPool.execute(clueGenrator);

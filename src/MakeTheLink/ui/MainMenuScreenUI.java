@@ -43,6 +43,8 @@ public class MainMenuScreenUI extends AbstractScreenUI {
 		label.setImage(image);
 		label.setBackground(Display.getCurrent().getSystemColor(
 				SWT.COLOR_DARK_BLUE));
+
+
 		label.setLayoutData(data);
 
 		Label newGameButton = new Label(shell, SWT.RIGHT);

@@ -1,5 +1,6 @@
 package MakeTheLink.ui;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
@@ -40,9 +41,9 @@ public class CluesRunnable implements Runnable {
 
 			display.asyncExec(new Runnable() {
 				public void run() {
-					TableItem clue_item = new TableItem(clues_list, 300);
+					TableItem clue_item = new TableItem(clues_list, SWT.NONE);
 					clue_item.setText(hint);
-					clues_list.showItem(clue_item);
+					clues_list.redraw();
 				}
 			});
 		}
